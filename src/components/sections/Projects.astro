@@ -1,0 +1,55 @@
+---
+import { siteConfig } from '../../../config/site.config';
+
+const projects = [...siteConfig.projects].sort((a, b) => Number(b.featured) - Number(a.featured));
+---
+
+<section id="projects" class="section" aria-labelledby="projects-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">Selected work</p>
+      <h2 class="section-title" id="projects-title">
+        Projects
+      </h2>
+    </div>
+    <div class="cards">
+      {projects.map((project) => (
+        <article class:list={['card', { 'card-featured': project.featured }]}>
+          <h3>{project.title}</h3>
+          <p>{project.description}</p>
+          {(project.repoUrl || project.liveUrl) && (
+            <div class="project-links">
+              {project.repoUrl && (
+                <a
+                  class="btn btn-ghost btn-sm"
+                  href={project.repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Source ↗
+                </a>
+              )}
+              {project.liveUrl && (
+                <a
+                  class="btn btn-primary btn-sm"
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Live ↗
+                </a>
+              )}
+            </div>
+          )}
+          {project.tags.length > 0 && (
+            <div class="tag-row" style="margin-top: 1rem;">
+              {project.tags.map((tag) => (
+                <span class="chip chip-accent">{tag}</span>
+              ))}
+            </div>
+          )}
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

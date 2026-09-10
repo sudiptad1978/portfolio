@@ -1,0 +1,33 @@
+/* Theme: PROFESSIONAL — editorial serif headings, corporate-safe palette. */
+[data-theme='professional'] {
+  --bg-page: #fdfdfb;
+  --bg-surface: #ffffff;
+  --bg-surface-alt: #f7f6f2;
+  --text-primary: #21252c;
+  --text-secondary: #4d5561;
+  --text-muted: #697080;
+  --border-subtle: #e6e4dd;
+  --accent: #1d4ed8;
+  --accent-contrast: #ffffff;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+  --font-heading: Georgia, 'Times New Roman', serif;
+  --radius-lg: 8px;
+  --radius-md: 6px;
+  --radius-sm: 4px;
+  --shadow-card: 0 1px 2px rgb(33 37 44 / 0.07);
+  --header-bg: rgb(253 253 251 / 0.9);
+}
+
+[data-theme='professional'][data-mode='dark'] {
+  --bg-page: #15171b;
+  --bg-surface: #1e2127;
+  --bg-surface-alt: #262a31;
+  --text-primary: #eceef1;
+  --text-secondary: #c0c5cd;
+  --text-muted: #9aa1ad;
+  --border-subtle: #2c3039;
+  --accent: #7ea2f7;
+  --accent-contrast: #15171b;
+  --header-bg: rgb(21 23 27 / 0.9);
+}

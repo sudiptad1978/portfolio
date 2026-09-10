@@ -1,0 +1,29 @@
+name: Blog sync worker
+
+# Deploys the standalone cron Worker that syndicates Medium/RSS feeds into D1.
+# (Pages Functions cannot host Cron Triggers — see workers/wrangler.toml.)
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/workers/**'
+      - 'src/lib/**'
+      - 'workers/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: portfolio
+          command: deploy --config workers/wrangler.toml

@@ -1,0 +1,46 @@
+---
+import { siteConfig } from '../../config/site.config';
+import { templates, sectionLabels } from '../templates';
+import ThemeToggle from './ThemeToggle.astro';
+
+const activeTemplate = templates[siteConfig.template] ?? templates.developer;
+const sectionIds = siteConfig.sections ?? activeTemplate.sections;
+const navSections = sectionIds.filter((id) => id !== 'hero');
+const initials = siteConfig.name
+  .split(/\s+/)
+  .map((part) => part[0])
+  .slice(0, 2)
+  .join('')
+  .toUpperCase();
+---
+
+<header class="site-header">
+  <div class="container site-header-inner">
+    <a class="brand" href="#hero" aria-label={`${siteConfig.name} — home`}>
+      <span class="brand-mark" aria-hidden="true">
+        {initials}
+      </span>
+      <span>{siteConfig.name}</span>
+    </a>
+
+    <div class="header-actions">
+      {siteConfig.bookingUrl && (
+        <a
+          class="btn btn-primary btn-sm"
+          href={siteConfig.bookingUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Book an intro
+        </a>
+      )}
+      <ThemeToggle />
+    </div>
+
+    <nav class="nav-links" aria-label="Primary">
+      {navSections.map((id) => (
+        <a href={`#${id}`}>{sectionLabels[id]}</a>
+      ))}
+    </nav>
+  </div>
+</header>

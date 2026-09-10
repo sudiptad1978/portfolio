@@ -1,0 +1,4 @@
+# Local Cloudflare Pages Function secrets (used by `wrangler pages dev` / astro dev platform proxy).
+# Copy to `.dev.vars` — NEVER commit the real file.
+TURNSTILE_SECRET_KEY=
+MEDIUM_RSS_URL=

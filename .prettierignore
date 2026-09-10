@@ -1,0 +1,11 @@
+dist
+.astro
+node_modules
+coverage
+playwright-report
+test-results
+.lighthouseci
+.wrangler
+package-lock.json
+public/og
+CHANGELOG.md

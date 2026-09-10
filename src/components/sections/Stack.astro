@@ -1,0 +1,26 @@
+---
+import { siteConfig } from '../../../config/site.config';
+---
+
+<section id="stack" class="section" aria-labelledby="stack-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">Working stack</p>
+      <h2 class="section-title" id="stack-title">
+        Tools I reach for
+      </h2>
+    </div>
+    <dl class="stack-grid">
+      {siteConfig.stack.map((group) => (
+        <div class="stack-row">
+          <dt>{group.group}</dt>
+          <dd>
+            {group.items.map((item) => (
+              <span class="chip">{item}</span>
+            ))}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>

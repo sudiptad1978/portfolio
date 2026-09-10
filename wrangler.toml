@@ -1,0 +1,30 @@
+# ── Cloudflare Pages project (Astro SSR build output) ─────────────────────────
+# Docs: https://developers.cloudflare.com/pages/functions/wrangler-configuration/
+name = "portfolio"
+compatibility_date = "2026-05-01"
+pages_build_output_dir = "dist"
+
+# ── D1: structured content (blog cache, contact submissions, sync logs) ──────
+# Replace the placeholder ID after `wrangler d1 create portfolio-db`
+# (doctor script flags placeholders: `npm run doctor`)
+[[d1_databases]]
+binding = "DB"
+database_name = "portfolio-db"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "db/migrations"
+
+# ── KV: hot config cache, latest-posts cache, rate-limit counters ────────────
+# Replace the placeholder ID after `wrangler kv namespace create CACHE`
+[[kv_namespaces]]
+binding = "CACHE"
+id = "00000000000000000000000000000000"
+
+# ── R2: media (images, resume PDF, OG images) ────────────────────────────────
+# Create with `wrangler r2 bucket create portfolio-media`
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "portfolio-media"
+
+# Secrets (never in this file — use `wrangler pages secret put <NAME>`):
+#   TURNSTILE_SECRET_KEY  — contact-form bot protection
+# Local development: copy `.dev.vars.example` → `.dev.vars`

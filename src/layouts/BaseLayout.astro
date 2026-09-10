@@ -1,0 +1,100 @@
+---
+import '../themes/minimal/tokens.css';
+import '../themes/modern/tokens.css';
+import '../themes/terminal/tokens.css';
+import '../themes/professional/tokens.css';
+import '../styles/global.css';
+import { siteConfig } from '../../config/site.config';
+import { accentContrastColor } from '../lib/color';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const { title, description, ogImage } = Astro.props;
+
+const pageTitle = title
+  ? `${title} · ${siteConfig.name}`
+  : `${siteConfig.name} — ${siteConfig.role}`;
+const pageDescription = description ?? siteConfig.bio;
+const canonical = new URL(Astro.url.pathname, siteConfig.url).href;
+const ogUrl = new URL(ogImage ?? siteConfig.seo.ogImage, siteConfig.url).href;
+const twitterHandle = siteConfig.social
+  .find((s) => s.platform === 'x')
+  ?.url?.split('/')
+  .pop()
+  ?.replace('@', '');
+
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: siteConfig.name,
+  jobTitle: siteConfig.role,
+  description: siteConfig.bio,
+  url: siteConfig.url,
+  email: `mailto:${siteConfig.email}`,
+  address: siteConfig.location
+    ? { '@type': 'PostalAddress', addressLocality: siteConfig.location }
+    : undefined,
+  sameAs: siteConfig.social.map((s) => s.url),
+};
+---
+
+<!doctype html>
+<html lang="en" data-theme={siteConfig.theme} data-mode="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap.xml" />
+    <meta name="generator" content={Astro.generator} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    <meta name="twitter:image" content={ogUrl} />
+    {twitterHandle && <meta name="twitter:creator" content={`@${twitterHandle}`} />}
+
+    <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)" />
+
+    <!-- Pre-paint mode resolution: no flash of wrong theme (blueprint §14).
+         The sha256 of this exact snippet is allow-listed in public/_headers (CSP). -->
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem('mode');
+          var mode =
+            stored === 'light' || stored === 'dark'
+              ? stored
+              : window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+          document.documentElement.setAttribute('data-mode', mode);
+        } catch (e) {}
+      })();
+    </script>
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(personJsonLd)}></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      Skip to content
+    </a>
+    <Nav />
+    <slot />
+    <Footer />
+  </body>
+</html>

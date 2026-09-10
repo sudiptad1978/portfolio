@@ -1,0 +1,32 @@
+/* Theme: TERMINAL — monospace everything, sharp corners, phosphor accent. */
+[data-theme='terminal'] {
+  --bg-page: #101410;
+  --bg-surface: #161c16;
+  --bg-surface-alt: #1d241d;
+  --text-primary: #d2e8cd;
+  --text-secondary: #9db897;
+  --text-muted: #7d9577;
+  --border-subtle: #263026;
+  --accent: #4ade80;
+  --accent-contrast: #101410;
+  --font-sans: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+  --radius-lg: 0;
+  --radius-md: 0;
+  --radius-sm: 0;
+  --shadow-card: none;
+  --header-bg: rgb(16 20 16 / 0.92);
+}
+
+[data-theme='terminal'][data-mode='light'] {
+  --bg-page: #f4f7f2;
+  --bg-surface: #ffffff;
+  --bg-surface-alt: #ebf0e8;
+  --text-primary: #1a241a;
+  --text-secondary: #47552f;
+  --text-muted: #55654d;
+  --border-subtle: #dde5d8;
+  --accent: #3f7d32;
+  --accent-contrast: #ffffff;
+  --header-bg: rgb(244 247 242 / 0.92);
+}

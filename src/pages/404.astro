@@ -1,0 +1,19 @@
+---
+export const prerender = true;
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found" description="This page does not exist.">
+  <main id="main" class="error-page">
+    <div class="container">
+      <h1>404</h1>
+      <p>The page you're looking for doesn't exist — it may have moved, or the link is stale.</p>
+      <p>
+        <a class="btn btn-primary" href="/">
+          Back to the homepage
+        </a>
+      </p>
+    </div>
+  </main>
+</BaseLayout>

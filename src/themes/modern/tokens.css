@@ -1,0 +1,32 @@
+/* Theme: MODERN — the default. Clean surfaces, vivid accent, soft radii. */
+[data-theme='modern'] {
+  --bg-page: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-surface-alt: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border-subtle: #e2e8f0;
+  --accent: #f97316;
+  --accent-contrast: #1c1917;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, monospace;
+  --radius-lg: 14px;
+  --radius-md: 10px;
+  --radius-sm: 6px;
+  --shadow-card: 0 1px 3px rgb(15 23 42 / 0.08), 0 4px 16px rgb(15 23 42 / 0.04);
+  --header-bg: rgb(248 250 252 / 0.85);
+}
+
+[data-theme='modern'][data-mode='dark'] {
+  --bg-page: #0b1220;
+  --bg-surface: #111a2c;
+  --bg-surface-alt: #182338;
+  --text-primary: #e8eef7;
+  --text-secondary: #b3c0d1;
+  --text-muted: #64748b;
+  --border-subtle: #1e2a42;
+  --accent: #f97316;
+  --accent-contrast: #0b1220;
+  --header-bg: rgb(11 18 32 / 0.85);
+}

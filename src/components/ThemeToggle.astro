@@ -1,0 +1,56 @@
+---
+/**
+ * Light / Dark / System mode toggle — a vanilla JS island (no framework).
+ * Persisted in localStorage('mode'); the pre-paint snippet in BaseLayout
+ * applies it before first paint. The bundled script below is an external
+ * file, so it satisfies a strict `script-src 'self'` CSP.
+ */
+---
+
+<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch color mode">
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+  </svg>
+</button>
+
+<script>
+  const button = document.getElementById('theme-toggle') as HTMLButtonElement | null;
+  const order = ['light', 'dark', 'system'] as const;
+
+  function resolve(mode: string): 'light' | 'dark' {
+    if (mode === 'light' || mode === 'dark') return mode;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  function apply(mode: string): void {
+    document.documentElement.setAttribute('data-mode', resolve(mode));
+    if (button) {
+      button.setAttribute('aria-label', `Color mode: ${mode} (click to switch)`);
+      button.title = `Color mode: ${mode}`;
+    }
+  }
+
+  button?.addEventListener('click', () => {
+    const current = localStorage.getItem('mode') ?? 'system';
+    const next = order[(order.indexOf(current as (typeof order)[number]) + 1) % order.length];
+    localStorage.setItem('mode', next);
+    apply(next);
+  });
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    const current = localStorage.getItem('mode') ?? 'system';
+    if (current === 'system') apply('system');
+  });
+
+  apply(localStorage.getItem('mode') ?? 'system');
+</script>

@@ -1,0 +1,117 @@
+---
+/**
+ * Blog post — dynamic (SSR) with cache-aside fallback:
+ *   D1 first (freshly synced posts are live without a rebuild)
+ *   → content collection fallback (the zero-database path).
+ * Architecture doc §5 "Blog retrieval".
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPostBySlug } from '../../lib/blog';
+import { formatDate } from '../../lib/format';
+import { siteConfig } from '../../../config/site.config';
+import { render } from 'astro:content';
+
+const { slug } = Astro.params;
+const result = slug ? await getPostBySlug(Astro.locals.runtime?.env, slug) : null;
+
+const found = result !== null;
+if (!found) {
+  Astro.response.status = 404;
+}
+
+const summary = found ? (result!.source === 'd1' ? result!.post : result!.summary) : null;
+const canonicalUrl = summary?.canonicalUrl ?? new URL(Astro.url.pathname, siteConfig.url).href;
+const Content =
+  found && result!.source === 'collection' ? (await render(result!.entry)).Content : null;
+
+const articleJsonLd =
+  found && summary
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: summary.title,
+        description: summary.excerpt,
+        datePublished: summary.publishedAt,
+        author: { '@type': 'Person', name: siteConfig.name, url: siteConfig.url },
+        mainEntityOfPage: canonicalUrl,
+      }
+    : null;
+---
+
+<BaseLayout
+  title={found && summary ? summary.title : 'Post not found'}
+  description={found && summary ? summary.excerpt : 'This post does not exist.'}
+>
+  {found && summary && (
+    <>
+      {articleJsonLd && (
+        <script
+          is:inline
+          type="application/ld+json"
+          set:html={JSON.stringify(articleJsonLd)}
+        ></script>
+      )}
+      <main id="main">
+        <section class="section" aria-label="Blog post">
+          <div class="container">
+            <article class="article">
+              <header class="article-header">
+                <p class="post-meta">
+                  <span>{formatDate(summary.publishedAt)}</span>
+                  <span aria-hidden="true">·</span>
+                  <span>{summary.readingTimeMinutes} min read</span>
+                </p>
+                <h1>{summary.title}</h1>
+                {summary.tags.length > 0 && (
+                  <div class="tag-row">
+                    {summary.tags.map((tag) => (
+                      <span class="chip">{tag}</span>
+                    ))}
+                  </div>
+                )}
+              </header>
+
+              <div class="article-body">
+                {result!.source === 'd1' ? (
+                  <div set:html={result!.post.contentHtml} />
+                ) : (
+                  Content && <Content />
+                )}
+              </div>
+
+              <footer class="article-footer">
+                <a class="btn btn-ghost btn-sm" href="/blog">
+                  ← All writing
+                </a>
+                {summary.canonicalUrl && siteConfig.blog.canonicalToSource && (
+                  <a
+                    class="btn btn-ghost btn-sm"
+                    href={summary.canonicalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View original ↗
+                  </a>
+                )}
+              </footer>
+            </article>
+          </div>
+        </section>
+      </main>
+    </>
+  )}
+
+  {!found && (
+    <main id="main" class="error-page">
+      <div class="container">
+        <h1>404</h1>
+        <p>That post doesn't exist — it may have been removed, or the link is stale.</p>
+        <p>
+          <a class="btn btn-primary" href="/blog">
+            ← All writing
+          </a>
+        </p>
+      </div>
+    </main>
+  )}
+</BaseLayout>

@@ -1,0 +1,48 @@
+---
+/**
+ * Homepage — prerendered at build time (static-first).
+ * Section order/visibility comes from the active template preset
+ * (src/templates/*) or an explicit `sections` override in site.config.ts.
+ */
+export const prerender = true;
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { siteConfig } from '../../config/site.config';
+import { templates } from '../templates';
+import Hero from '../components/sections/Hero.astro';
+import PointOfView from '../components/sections/PointOfView.astro';
+import Capabilities from '../components/sections/Capabilities.astro';
+import Stack from '../components/sections/Stack.astro';
+import Projects from '../components/sections/Projects.astro';
+import Experience from '../components/sections/Experience.astro';
+import CareerSnapshot from '../components/sections/CareerSnapshot.astro';
+import Education from '../components/sections/Education.astro';
+import BlogTeaser from '../components/sections/BlogTeaser.astro';
+import Contact from '../components/sections/Contact.astro';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const sectionMap: Record<string, any> = {
+  hero: Hero,
+  pov: PointOfView,
+  capabilities: Capabilities,
+  stack: Stack,
+  projects: Projects,
+  experience: Experience,
+  snapshot: CareerSnapshot,
+  education: Education,
+  blog: BlogTeaser,
+  contact: Contact,
+};
+
+const template = templates[siteConfig.template] ?? templates.developer;
+const sections = siteConfig.sections ?? template.sections;
+---
+
+<BaseLayout>
+  <main id="main">
+    {sections.map((id) => {
+      const Section = sectionMap[id];
+      return Section ? <Section /> : null;
+    })}
+  </main>
+</BaseLayout>

@@ -1,0 +1,49 @@
+---
+/**
+ * Homepage blog teaser — build-time from the content collection.
+ * Freshly D1-synced posts appear here on the next deploy (architecture §5:
+ * static-first; the dynamic /api/blog endpoint serves live data between builds).
+ */
+import { getCollection } from 'astro:content';
+import { readingTimeMinutes } from '../../lib/readingTime';
+import { formatDate } from '../../lib/format';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+<section id="blog" class="section" aria-labelledby="blog-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">Writing</p>
+      <h2 class="section-title" id="blog-title">
+        Latest posts
+      </h2>
+    </div>
+
+    {posts.length === 0 ? (
+      <p class="prose">Nothing published yet — check back soon.</p>
+    ) : (
+      <div class="post-list">
+        {posts.map((post) => (
+          <a class="post-item" href={`/blog/${post.id.replace(/\.md$/, '')}/`}>
+            <p class="post-meta">
+              <span>{formatDate(post.data.pubDate.toISOString())}</span>
+              <span aria-hidden="true">·</span>
+              <span>{readingTimeMinutes(post.body ?? '')} min read</span>
+            </p>
+            <h3>{post.data.title}</h3>
+            <p>{post.data.description}</p>
+          </a>
+        ))}
+      </div>
+    )}
+
+    <div class="blog-more">
+      <a class="btn btn-ghost" href="/blog">
+        All writing →
+      </a>
+    </div>
+  </div>
+</section>

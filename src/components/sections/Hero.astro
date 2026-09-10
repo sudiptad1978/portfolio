@@ -1,0 +1,87 @@
+---
+import { siteConfig } from '../../../config/site.config';
+
+const initials = siteConfig.name
+  .split(/\s+/)
+  .map((part) => part[0])
+  .slice(0, 2)
+  .join('')
+  .toUpperCase();
+---
+
+<section id="hero" class="hero" aria-label="Introduction">
+  <div class="container hero-grid">
+    <div>
+      <p class="kicker">
+        {siteConfig.role}
+        {siteConfig.location && ` · ${siteConfig.location}`}
+      </p>
+      <h1>{siteConfig.headline}</h1>
+      <p class="hero-bio">{siteConfig.bio}</p>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#projects">
+          View my work
+        </a>
+        {siteConfig.bookingUrl ? (
+          <a
+            class="btn btn-ghost"
+            href={siteConfig.bookingUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Book an intro
+          </a>
+        ) : (
+          <a class="btn btn-ghost" href="#contact">
+            Get in touch
+          </a>
+        )}
+      </div>
+      <div class="hero-meta">
+        <span>
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+            <path d="m22 6-10 7L2 6" />
+          </svg>
+          <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
+        </span>
+        {siteConfig.social
+          .filter((s) => s.platform !== 'email')
+          .map((social) => (
+            <span>
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+              </svg>
+              <a href={social.url} target="_blank" rel="noopener noreferrer">
+                {social.platform}
+              </a>
+            </span>
+          ))}
+      </div>
+    </div>
+    <img
+      class="avatar"
+      src={siteConfig.avatar}
+      alt={`Portrait of ${siteConfig.name}`}
+      width="220"
+      height="220"
+    />
+  </div>
+</section>

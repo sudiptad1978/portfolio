@@ -1,0 +1,42 @@
+---
+import { siteConfig } from '../../../config/site.config';
+import { formatDateRange } from '../../lib/format';
+---
+
+<section id="experience" class="section" aria-labelledby="experience-title">
+  <div class="container">
+    <div class="section-head">
+      <p class="kicker">Track record</p>
+      <h2 class="section-title" id="experience-title">
+        Experience
+      </h2>
+    </div>
+    <ol class="timeline">
+      {siteConfig.experience.map((role) => (
+        <li class="timeline-item">
+          <p class="timeline-when">{formatDateRange(role.startDate, role.endDate)}</p>
+          <h3 class="timeline-role">{role.role}</h3>
+          <p class="timeline-company">
+            {role.company}
+            {role.location && ` · ${role.location}`}
+          </p>
+          {role.summary && <p class="timeline-summary">{role.summary}</p>}
+          {role.highlights.length > 0 && (
+            <ul class="timeline-highlights">
+              {role.highlights.map((highlight) => (
+                <li>{highlight}</li>
+              ))}
+            </ul>
+          )}
+          {role.tags.length > 0 && (
+            <div class="tag-row">
+              {role.tags.map((tag) => (
+                <span class="chip">{tag}</span>
+              ))}
+            </div>
+          )}
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

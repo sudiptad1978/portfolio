@@ -1,0 +1,29 @@
+# ── Blog syndication cron worker (separate deployable Worker) ────────────────
+# Cloudflare Pages Functions do not support Cron Triggers, so the scheduled
+# blog sync runs as a standalone Worker bound to the same D1 database and KV
+# namespace as the Pages project.
+#
+# Deploy: npm run deploy:sync-worker
+# (or via the `.github/workflows/blog-sync.yml` GitHub Actions workflow)
+name = "portfolio-blog-sync"
+main = "../src/workers/blog-sync.ts"
+compatibility_date = "2026-05-01"
+
+# Fetch + upsert feeds every 6 hours
+[triggers]
+crons = ["0 */6 * * *"]
+
+# Same database as the Pages project — keep IDs in sync with ../wrangler.toml
+[[d1_databases]]
+binding = "DB"
+database_name = "portfolio-db"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "../db/migrations"
+
+[[kv_namespaces]]
+binding = "CACHE"
+id = "00000000000000000000000000000000"
+
+# Secrets (set once per environment):
+#   wrangler secret put MEDIUM_RSS_URL   --config workers/wrangler.toml
+#   wrangler secret put SYNC_SOURCES     --config workers/wrangler.toml (optional, comma-separated RSS URLs)

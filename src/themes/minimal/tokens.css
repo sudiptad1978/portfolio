@@ -1,0 +1,32 @@
+/* Theme: MINIMAL — quiet monochrome, generous whitespace, understated radii. */
+[data-theme='minimal'] {
+  --bg-page: #fafaf9;
+  --bg-surface: #ffffff;
+  --bg-surface-alt: #f5f5f4;
+  --text-primary: #1c1917;
+  --text-secondary: #57534e;
+  --text-muted: #78716c;
+  --border-subtle: #e7e5e4;
+  --accent: #1c1917;
+  --accent-contrast: #fafaf9;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, monospace;
+  --radius-lg: 4px;
+  --radius-md: 3px;
+  --radius-sm: 2px;
+  --shadow-card: 0 1px 2px rgb(28 25 23 / 0.06);
+  --header-bg: rgb(250 250 249 / 0.9);
+}
+
+[data-theme='minimal'][data-mode='dark'] {
+  --bg-page: #0c0a09;
+  --bg-surface: #1c1917;
+  --bg-surface-alt: #292524;
+  --text-primary: #fafaf9;
+  --text-secondary: #d6d3d1;
+  --text-muted: #a8a29e;
+  --border-subtle: #292524;
+  --accent: #fafaf9;
+  --accent-contrast: #1c1917;
+  --header-bg: rgb(12 10 9 / 0.9);
+}

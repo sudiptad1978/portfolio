@@ -1,0 +1,56 @@
+---
+/**
+ * Blog index — prerendered at build time from the content collection.
+ * Cron-synced D1 posts appear here on the next deploy; live data between
+ * builds is served by GET /api/blog (KV → D1 → collection).
+ */
+export const prerender = true;
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { readingTimeMinutes } from '../../lib/readingTime';
+import { formatDate } from '../../lib/format';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout
+  title="Blog"
+  description="Notes on quality engineering, automation, and shipping with confidence."
+>
+  <main id="main">
+    <section class="section" aria-labelledby="blog-index-title">
+      <div class="container">
+        <div class="section-head">
+          <p class="kicker">Writing</p>
+          <h1 class="section-title" id="blog-index-title">
+            All posts
+          </h1>
+        </div>
+
+        {posts.length === 0 ? (
+          <p class="prose">Nothing published yet — check back soon.</p>
+        ) : (
+          <div class="post-list">
+            {posts.map((post) => (
+              <a class="post-item" href={`/blog/${post.id}/`}>
+                <p class="post-meta">
+                  <span>{formatDate(post.data.pubDate.toISOString())}</span>
+                  <span aria-hidden="true">·</span>
+                  <span>{readingTimeMinutes(post.body ?? '')} min read</span>
+                  {post.data.tags.slice(0, 3).map((tag) => (
+                    <span class="chip">{tag}</span>
+                  ))}
+                </p>
+                <h2>{post.data.title}</h2>
+                <p>{post.data.description}</p>
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  </main>
+</BaseLayout>
