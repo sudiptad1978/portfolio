@@ -34,7 +34,7 @@
     "@axe-core/playwright": "^4.13.0",
     "@playwright/test": "^1.63.0",
     "@vitest/coverage-v8": "^3.2.7",
-    "astro": "^5.18.2",
+    "astro": "^7.3.1",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^1.0.0",
     "typescript": "^5.9.3",
